@@ -1,0 +1,34 @@
+## Datadog Agent with APM, Log, Processes enabled
+## Reference: https://github.com/DataDog/helm-charts/tree/main/charts/datadog
+## values.yaml: https://github.com/DataDog/helm-charts/blob/main/charts/datadog/values.yaml
+## After change yaml, apply the change by below command:
+## helm upgrade -f datadog-values.yaml datadog-agent datadog/datadog
+
+## targetSystem by default is linux. 
+## In case you are not on linux. Replace it with the name of your OS: windows.
+# targetSystem: "windows"
+
+datadog:
+  ## To create a secret that contains your Datadog API key
+  ## DATADOG_API_SECRET_NAME=datadog-api-secret
+  ## kubectl create secret generic $DATADOG_API_SECRET_NAME --from-literal api-key="<DATADOG_API_KEY>"
+  ## If not using secrets, then use apiKey and appKey instead
+  # apiKey: <DATADOG_API_KEY>
+  # appKey: <DATADOG_APP_KEY>
+  apiKeyExistingSecret: datadog-api-secret
+  # appKeyExistingSecret: <DATADOG_APP_KEY_SECRET>
+
+  # clusterName: <CLUSTER_NAME>
+  # site:  # datadoghq.com
+  # tags: []
+  
+  apm:
+    portEnabled: true   
+  
+  logs:
+    enabled: true
+    containerCollectAll: true
+  
+  processAgent:
+    enabled: true
+    processCollection: true
