@@ -17,9 +17,9 @@ kind: Deployment
 metadata:
   name: adservice
   labels:
-      tags.datadoghq.com/env: "dev-auto-inject"
+      tags.datadoghq.com/env: "dev"
       tags.datadoghq.com/service: "adservice"
-      tags.datadoghq.com/version: "0.5.0"
+      tags.datadoghq.com/version: "1.0"
 spec:
   selector:
     matchLabels:
@@ -28,9 +28,9 @@ spec:
     metadata:
       labels:
         app: adservice
-        tags.datadoghq.com/env: "dev-auto-inject"
+        tags.datadoghq.com/env: "dev"
         tags.datadoghq.com/service: "adservice"
-        tags.datadoghq.com/version: "0.5.0"
+        tags.datadoghq.com/version: "1.0"
         admission.datadoghq.com/enabled: "true"
       annotations:
         admission.datadoghq.com/java-lib.version: "v1.3.0"
@@ -57,12 +57,12 @@ spec:
         env:
         - name: PORT
           value: "9555"
-        - name: DISABLE_STATS
-          value: "1"
-        - name: DISABLE_TRACING
-          value: "1"
-        - name: DISABLE_PROFILER
-          value: "1"
+#        - name: DISABLE_STATS
+#          value: "1"
+#        - name: DISABLE_TRACING
+#          value: "1"
+#        - name: DISABLE_PROFILER
+#          value: "1"
         - name: DD_PROFILING_ENABLED
           value: "true"
         - name: DD_LOGS_INJECTION

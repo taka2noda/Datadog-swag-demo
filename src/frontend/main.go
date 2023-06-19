@@ -20,16 +20,18 @@ import (
 	"net/http"
 	"os"
 	"time"
-
+	// Datadog Trace
 	grpctrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
 	muxtrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gorilla/mux"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
-
+	// Other o11y Tools
 	profilerold "cloud.google.com/go/profiler"
-
+    // "contrib.go.opencensus.io/exporter/jaeger"
+	// "contrib.go.opencensus.io/exporter/stackdriver"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	// OTel
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
@@ -88,6 +90,7 @@ type frontendServer struct {
 }
 
 func main() {
+	// Datadog tracer setting
 	tracer.Start(tracer.WithRuntimeMetrics())
 	defer tracer.Stop()
 	ctx := context.Background()
@@ -103,6 +106,7 @@ func main() {
 	}
 	log.Out = os.Stdout
 
+	// Datadog profiler setting
 	err := profiler.Start(
 		profiler.WithProfileTypes(
 			profiler.CPUProfile,
@@ -158,6 +162,7 @@ func main() {
 	mustConnGRPC(ctx, &svc.checkoutSvcConn, svc.checkoutSvcAddr)
 	mustConnGRPC(ctx, &svc.adSvcConn, svc.adSvcAddr)
 
+	// Create a traced mux router for Datadog replaced below line
 	// r := mux.NewRouter()
 	r := muxtrace.NewRouter()
 	r.HandleFunc("/", svc.homeHandler).Methods(http.MethodGet, http.MethodHead)
@@ -243,14 +248,19 @@ func mustConnGRPC(ctx context.Context, conn **grpc.ClientConn, addr string) {
 	if os.Getenv("ENABLE_TRACING") == "1" {
 		*conn, err = grpc.DialContext(ctx, addr,
 			grpc.WithInsecure(),
+			// restored to add and comment outed by Taka2
+			// grpc.WithStatsHandler(&ocgrpc.ClientHandler{}), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui)),
 			grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()),
 			grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()))
 	} else {
 		// Create the client interceptor using the grpc trace package.
-		si := grpctrace.StreamClientInterceptor(grpctrace.WithServiceName("frontend"))
-		ui := grpctrace.UnaryClientInterceptor(grpctrace.WithServiceName("frontend"))
+		//add "-grpc" to check the impact
+		si := grpctrace.StreamClientInterceptor(grpctrace.WithServiceName("frontend-grpc"))
+		ui := grpctrace.UnaryClientInterceptor(grpctrace.WithServiceName("frontend-grpc"))
 		*conn, err = grpc.DialContext(ctx, addr,
 			grpc.WithInsecure(),
+			// restored to add and comment outed by Taka2
+			//grpc.WithStatsHandler(&ocgrpc.ClientHandler{}), grpc.WithStreamInterceptor(si), grpc.WithUnaryInterceptor(ui)),
 			grpc.WithUnaryInterceptor(ui),
 			grpc.WithStreamInterceptor(si))
 	}

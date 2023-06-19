@@ -17,9 +17,9 @@ kind: Deployment
 metadata:
   name: recommendationservice
   labels:
-      tags.datadoghq.com/env: "dev-auto-inject"
+      tags.datadoghq.com/env: "dev"
       tags.datadoghq.com/service: "recommendationservice"
-      tags.datadoghq.com/version: "0.5.0"
+      tags.datadoghq.com/version: "1.0"
 spec:
   selector:
     matchLabels:
@@ -28,9 +28,9 @@ spec:
     metadata:
       labels:
         app: recommendationservice
-        tags.datadoghq.com/env: "dev-auto-inject"
+        tags.datadoghq.com/env: "dev"
         tags.datadoghq.com/service: "recommendationservice"
-        tags.datadoghq.com/version: "0.5.0"
+        tags.datadoghq.com/version: "1.0"
         admission.datadoghq.com/enabled: "true"
       annotations:
         admission.datadoghq.com/python-lib.version: "v1.6.3"
@@ -66,13 +66,13 @@ spec:
         - name: PORT
           value: "8080"
         - name: PRODUCT_CATALOG_SERVICE_ADDR
-          value: "productcatalogservice:3550"
-        - name: DISABLE_PROFILER
-          value: "1"
-        - name: DISABLE_DEBUGGER
-          value: "1"
-        - name: ENABLE_TRACING
-          value: "0"
+        #   value: "productcatalogservice:3550"
+        # - name: DISABLE_PROFILER
+        #   value: "1"
+        # - name: DISABLE_DEBUGGER
+        #   value: "1"
+        # - name: ENABLE_TRACING
+        #   value: "0"
         - name: DD_GRPC_SERVICE
           value: "recommendationservice"
         - name: DD_PROFILING_ENABLED

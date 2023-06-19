@@ -17,9 +17,9 @@ kind: Deployment
 metadata:
   name: paymentservice
   labels:
-      tags.datadoghq.com/env: "dev-auto-inject"
+      tags.datadoghq.com/env: "dev"
       tags.datadoghq.com/service: "paymentservice"
-      tags.datadoghq.com/version: "0.5.0"
+      tags.datadoghq.com/version: "1.0"
 spec:
   selector:
     matchLabels:
@@ -28,9 +28,9 @@ spec:
     metadata:
       labels:
         app: paymentservice
-        tags.datadoghq.com/env: "dev-auto-inject"
+        tags.datadoghq.com/env: "dev"
         tags.datadoghq.com/service: "paymentservice"
-        tags.datadoghq.com/version: "0.5.0"
+        tags.datadoghq.com/version: "1.0"
         admission.datadoghq.com/enabled: "true"
       annotations:
         admission.datadoghq.com/js-lib.version: "v3.9.1"
@@ -57,10 +57,10 @@ spec:
         env:
         - name: PORT
           value: "50051"
-        - name: DISABLE_PROFILER
-          value: "1"
-        - name: DISABLE_DEBUGGER
-          value: "1"
+        # - name: DISABLE_PROFILER
+        #   value: "1"
+        # - name: DISABLE_DEBUGGER
+        #   value: "1"
         - name: DD_LOGS_INJECTION
           value: "true"
         - name: DD_TRACE_SAMPLE_RATE
