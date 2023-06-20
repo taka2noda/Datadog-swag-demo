@@ -19,7 +19,7 @@ metadata:
   labels:
       tags.datadoghq.com/env: "dev"
       tags.datadoghq.com/service: "paymentservice"
-      tags.datadoghq.com/version: "1.0"
+      tags.datadoghq.com/version: "1.1"
 spec:
   selector:
     matchLabels:
@@ -30,10 +30,12 @@ spec:
         app: paymentservice
         tags.datadoghq.com/env: "dev"
         tags.datadoghq.com/service: "paymentservice"
-        tags.datadoghq.com/version: "1.0"
+        tags.datadoghq.com/version: "1.1"
         admission.datadoghq.com/enabled: "true"
       annotations:
         admission.datadoghq.com/js-lib.version: "v3.9.1"
+        # Try to sync code but not work well...
+        ad.datadoghq.com/tags: '{"git.commit.sha": "3248d8eff15563835f89f7609b8d708279103662", "git.repository_url": "github.com/taka2noda/Datadog-swag-demo"}'
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
