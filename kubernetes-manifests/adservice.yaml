@@ -71,6 +71,8 @@ spec:
           value: "1"
         - name: DD_INVENTORIES_CONFIGURATION_ENABLED
           value: "true"
+        - name: DD_APPSEC_ENABLED
+          value: "true"
         resources:
           requests:
             cpu: 200m
